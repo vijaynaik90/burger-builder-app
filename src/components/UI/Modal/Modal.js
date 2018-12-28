@@ -11,7 +11,7 @@ class Modal extends Component {
 
   shouldComponentUpdate (nextProps,nextState) {
     //children of Modal can change. eg: whether to show Spinner or OrderSummary component?
-    // Hence wwe need to check for =====> nextProps.children !== this.props.children
+    // Hence we need to check for =====> nextProps.children !== this.props.children
       return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
   }
   render () {
