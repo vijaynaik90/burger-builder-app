@@ -17,12 +17,8 @@ const order = (props) => {
                       margin: '0 8px', border: '1px solid #ccc', padding: '5px'
                     }}>{ig.name} ({ig.quantity})
               </span>
-  }
-
-  );
-  if (props.ingredients) {
-
-  }
+  });
+  
   return (
     <div className={classes.Order}>
       <p>Ingrdients:{ingredientOutput} </p>
