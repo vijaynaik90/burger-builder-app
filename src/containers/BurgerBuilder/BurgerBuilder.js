@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import Aux from '../../hoc/Aux/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -7,13 +8,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders.js';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
-
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  cheese: 0.4,
-  meat: 1.5,
-  bacon:1.3
-};
+import * as actionTypes from '../../store/actions';
 
 class BurgerBuilder extends Component {
 
@@ -22,21 +17,19 @@ class BurgerBuilder extends Component {
   // Burger component wont have to those objects since its called from within BurgerBuilder.
   // Using the special withRouter named component we can have access to history,location and match objects within Burger component as well.
   componentDidMount () {
-    axios.get('https://burger-builder-baefa.firebaseio.com/ingredients.json')
-         .then(response => {
-            this.setState({ingredients: response.data});
-          })
-          .catch(error => {
-            this.setState({error: error});
-          });
+    //commenting this for now. Later, will be used when we load asynchronously.
+    // axios.get('https://burger-builder-baefa.firebaseio.com/ingredients.json')
+    //      .then(response => {
+    //         this.setState({ingredients: response.data});
+    //       })
+    //       .catch(error => {
+    //         this.setState({error: error});
+    //       });
   }
   state = {
-    ingredients: null,
-    totalPrice: 5,
-    canOrder: false,
     orderNowClicked: false,
     loading:false,
-    error: null
+    error: false
   }
 
   updateOrderState = (updatedIngredients) => {
@@ -50,46 +43,8 @@ class BurgerBuilder extends Component {
                       }).reduce((sum,el) => {
                         return sum + el;
                       },0);
-    this.setState({canOrder: sum > 0});
-  }
-
-  addIngredientHandler = (type) => {
-    const oldCount = this.state.ingredients[type];
-    const updatedCount = oldCount +1;
-
-    const updatedIngredients = {
-      ...this.state.ingredients
-    };
-
-    updatedIngredients[type] = updatedCount;
-    const priceAdditon = INGREDIENT_PRICES[type];
-    const newPrice = this.state.totalPrice + priceAdditon;
-
-    this.setState({
-      totalPrice: newPrice,
-      ingredients: updatedIngredients
-    });
-    this.updateOrderState(updatedIngredients);
-  }
-
-  removeIngredientHandler = (type) => {
-    const oldCount = this.state.ingredients[type];
-    if(oldCount<=0)
-      return;
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = {
-      ...this.state.ingredients
-    };
-    updatedIngredients[type] = updatedCount;
-    const priceDeduction = INGREDIENT_PRICES[type];
-    const newPrice = this.state.totalPrice - priceDeduction;
-
-    this.setState({
-      totalPrice: newPrice,
-      ingredients: updatedIngredients
-    });
-
-    this.updateOrderState(updatedIngredients);
+    
+    return sum > 0;
   }
 
 // the below syntax will not correctly because this keyword cannot be accessed inside this method.
@@ -126,7 +81,7 @@ class BurgerBuilder extends Component {
 
   render () {
     const disabledInfo = {
-      ...this.state.ingredients
+      ...this.props.ings
     };// this statemnt copies the ingredients object in an immutable way.
 
     for(let key in disabledInfo){
@@ -135,27 +90,24 @@ class BurgerBuilder extends Component {
 
     let orderSummary = null;
 
-
-
-
     let burger = this.state.error ? <p> Cannot load ingredients!!</p> : <Spinner />
-    if (this.state.ingredients) {
+    if (this.props.ings) {
       burger = (
               <Aux>
-                <Burger ingredients={this.state.ingredients}/>
+                <Burger ingredients={this.props.ings}/>
                   <BuildControls
-                    ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler}
+                    ingredientAdded={this.props.onIngredientAdded}
+                    ingredientRemoved={this.props.onIngredientRemoved}
                     disabled={disabledInfo}
-                    price={this.state.totalPrice}
+                    price={this.props.price}
                     toggleOrderNow={this.toggleOrderNowHandler}
-                    canOrder={this.state.canOrder}/>
+                    canOrder={this.updateOrderState(this.props.ings)} />
               </Aux>
             );
-      orderSummary = <OrderSummary ingredients={this.state.ingredients}
+      orderSummary = <OrderSummary ingredients={this.props.ings}
                                    orderCancelled={this.cancelOrderHandler}
                                    orderContinue={this.orderContinueHandler}
-                                   price={this.state.totalPrice} />;
+                                   price={this.props.price} />;
 
      if(this.state.loading) {
        orderSummary = <Spinner />;
@@ -174,4 +126,22 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default withErrorHandler(BurgerBuilder,axios);
+const mapStateToProps = state => {
+  return {
+    ings: state.ingredients,
+    price: state.totalPrice
+  };
+};
+
+//receives dispatch funtion as argument
+const mapDispatchToProps = dispatch => {
+  return {
+    onIngredientAdded: (name) => dispatch({type:actionTypes.ADD_INGREDIENT, ingredientName: name}),
+    onIngredientRemoved: (name) => dispatch ({type: actionTypes.REMOVE_INGREDIENT, ingredientName: name})
+  };
+};
+
+//you can have as many hoc as you want.
+// connect will just set some props on the component it is wrapping.
+// So props will be passed due to the <WrappedComponent {...this.props} /> in the withErrorHandler.js file.
+export default connect(mapStateToProps,mapDispatchToProps) (withErrorHandler(BurgerBuilder,axios));
