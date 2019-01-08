@@ -43,7 +43,7 @@ class BurgerBuilder extends Component {
                       }).reduce((sum,el) => {
                         return sum + el;
                       },0);
-    
+
     return sum > 0;
   }
 
@@ -63,19 +63,9 @@ class BurgerBuilder extends Component {
   }
 
   orderContinueHandler = () => {
-    // TODO: Navigate to checkout form.
-//generate dynamically.
     // ?salad=1&bacon=2
-    const queryParams = [];
-    for (let i in this.state.ingredients) {
-      queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
-    }
-    queryParams.push('price=' + this.state.totalPrice);
-    const queryString = queryParams.join('&');
-    this.props.history.push ({
-      pathname: '/checkout',
-      search: '?' + queryString
-    });
+    // Removing code related to query params since we are managing state with redux now.
+    this.props.history.push ({ pathname: '/checkout' });
 
   }
 
