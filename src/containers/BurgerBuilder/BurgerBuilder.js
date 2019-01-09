@@ -5,10 +5,10 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import axios from '../../axios-orders.js';
+import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import * as actionTypes from '../../store/actions';
+import * as burgerBuilderActions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
 
@@ -17,19 +17,11 @@ class BurgerBuilder extends Component {
   // Burger component wont have to those objects since its called from within BurgerBuilder.
   // Using the special withRouter named component we can have access to history,location and match objects within Burger component as well.
   componentDidMount () {
-    //commenting this for now. Later, will be used when we load asynchronously.
-    // axios.get('https://burger-builder-baefa.firebaseio.com/ingredients.json')
-    //      .then(response => {
-    //         this.setState({ingredients: response.data});
-    //       })
-    //       .catch(error => {
-    //         this.setState({error: error});
-    //       });
+    // calling the FIREBASE REST API is done in actionCreators.
+    this.props.onInitIngredients();
   }
   state = {
-    orderNowClicked: false,
-    loading:false,
-    error: false
+    orderNowClicked: false
   }
 
   updateOrderState = (updatedIngredients) => {
@@ -80,7 +72,7 @@ class BurgerBuilder extends Component {
 
     let orderSummary = null;
 
-    let burger = this.state.error ? <p> Cannot load ingredients!!</p> : <Spinner />
+    let burger = this.props.error ? <p> Cannot load ingredients!!</p> : <Spinner />
     if (this.props.ings) {
       burger = (
               <Aux>
@@ -119,15 +111,17 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
   return {
     ings: state.ingredients,
-    price: state.totalPrice
+    price: state.totalPrice,
+    error: state.error
   };
 };
 
 //receives dispatch funtion as argument
 const mapDispatchToProps = dispatch => {
   return {
-    onIngredientAdded: (name) => dispatch({type:actionTypes.ADD_INGREDIENT, ingredientName: name}),
-    onIngredientRemoved: (name) => dispatch ({type: actionTypes.REMOVE_INGREDIENT, ingredientName: name})
+    onIngredientAdded: (name) => dispatch(burgerBuilderActions.addIngredient(name)),
+    onIngredientRemoved: (name) => dispatch (burgerBuilderActions.removeIngredient(name)),
+    onInitIngredients: () => dispatch (burgerBuilderActions.initIngredients())
   };
 };
 
