@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-
+import { updateObject } from '../utility';
 
 const initialState = {
   ingredients: null,
@@ -20,37 +20,32 @@ const reducer = (state = initialState,action) => {
   switch(action.type){
 
     case actionTypes.ADD_INGREDIENT:
-        return {
-          ...state,
-          ingredients: {
-            ...state.ingredients,
-            [action.ingredientName] : state.ingredients[action.ingredientName] + 1
-            // dynamically override a property within a JS object using the above syntax.
-            // Eg: Here if ingredientName=salad, it will override only salad property of ingredients object and increase the count.
-          },
-          totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
-        };
+    // dynamically override a property within a JS object using the above syntax.
+    // Eg: Here if ingredientName=salad, it will override only salad property of ingredients object and increase the count.
+        const addUpdatedIngredient = { [action.ingredientName] : state.ingredients[action.ingredientName] + 1 };
+        const addUpdatedIngredients = updateObject(state.ingredients, addUpdatedIngredient);
+        return updateObject(state, {
+            ingredients: addUpdatedIngredients,
+            totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+          });
     case actionTypes.REMOVE_INGREDIENT:
-        return {
-            ...state,
-            ingredients: {
-              ...state.ingredients,
-              [action.ingredientName] : state.ingredients[action.ingredientName] - 1
-            },
+        const removeUpdatedIngredient = { [action.ingredientName] : state.ingredients[action.ingredientName] + 1 };
+        const removeUpdatedIngredients = updateObject(state.ingredients, removeUpdatedIngredient);        
+        return updateObject(state, {
+            ingredients: removeUpdatedIngredients,
             totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
-        };
+          });
     case actionTypes.SET_INGREDIENTS:
-        return {
-          ...state,
-          ingredients: action.ingredients,
-          error: false,
-          totalPrice: 5
-        }
+        return updateObject(state, {
+            ingredients: action.ingredients,
+            error: false,
+            totalPrice: 5
+          });
     case actionTypes.INIT_INGREDIENTS_ERROR:
-        return {
-          ...state,
-          error: true
-        }
+        return updateObject(state, {
+            ingredients: action.ingredients,
+            error: true
+          });
     default:
         return state;
   }
