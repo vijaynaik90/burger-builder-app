@@ -8,7 +8,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import * as burgerBuilderActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
 
@@ -57,6 +57,7 @@ class BurgerBuilder extends Component {
   orderContinueHandler = () => {
     // ?salad=1&bacon=2
     // Removing code related to query params since we are managing state with redux now.
+    this.props.onOrderInit();
     this.props.history.push ({ pathname: '/checkout' });
 
   }
@@ -110,18 +111,21 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
-    error: state.error
+    //need to do state.burgerBuilder here since we are accessing the sliced state from burgerBuilder reducer.
+    // This is defined in index.js as an argument to combineReducers function.
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error
   };
 };
 
 //receives dispatch funtion as argument
 const mapDispatchToProps = dispatch => {
   return {
-    onIngredientAdded: (name) => dispatch(burgerBuilderActions.addIngredient(name)),
-    onIngredientRemoved: (name) => dispatch (burgerBuilderActions.removeIngredient(name)),
-    onInitIngredients: () => dispatch (burgerBuilderActions.initIngredients())
+    onIngredientAdded: (name) => dispatch(actions.addIngredient(name)),
+    onIngredientRemoved: (name) => dispatch (actions.removeIngredient(name)),
+    onInitIngredients: () => dispatch (actions.initIngredients()),
+    onOrderInit: () => dispatch (actions.orderInit())
   };
 };
 
