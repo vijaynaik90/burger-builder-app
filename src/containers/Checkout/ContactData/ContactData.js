@@ -108,7 +108,7 @@ class ContactData extends Component {
       orderData: formElementValues
     };
 
-    this.props.onOrderBurger(order);
+    this.props.onOrderBurger(order,this.props.token);
   }
 
   checkValidity(value,rules){
@@ -125,6 +125,17 @@ class ContactData extends Component {
     if(rules.maxLength) {
       isValid = value.length <= rules.maxLength && isValid
     }
+
+    if (rules.isEmail) {
+          const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+          isValid = pattern.test(value) && isValid
+    }
+
+    if (rules.isNumeric) {
+        const pattern = /^\d+$/;
+        isValid = pattern.test(value) && isValid
+    }
+
     return isValid;
   }
 
@@ -197,7 +208,7 @@ class ContactData extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-      onOrderBurger: (orderData) => dispatch(orderBurgerActions.orderBurger(orderData))
+      onOrderBurger: (orderData, token) => dispatch(orderBurgerActions.orderBurger(orderData, token))
     };
 
 };
@@ -205,7 +216,8 @@ const mapStateToProps = state => {
     return {
       ings: state.burgerBuilder.ingredients,
       price: state.burgerBuilder.totalPrice,
-      loading: state.order.loading
+      loading: state.order.loading,
+      token: state.auth.token
     }
 };
 
