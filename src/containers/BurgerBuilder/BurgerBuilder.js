@@ -18,6 +18,7 @@ class BurgerBuilder extends Component {
   // Using the special withRouter named component we can have access to history,location and match objects within Burger component as well.
   componentDidMount () {
     // calling the FIREBASE REST API is done in actionCreators.
+    //call on init ingredients only if total ingredient count is not 0.
     this.props.onInitIngredients();
   }
   state = {
@@ -45,9 +46,17 @@ class BurgerBuilder extends Component {
   //   this.setState ({orderNowClicked:true});
   // }
 
-// arrow functions contains the state or context of this keyword
+// arrow functions contains the state or context of this keyword.
+// If orderNowClicked is true then Modal will be shown.
   toggleOrderNowHandler = () => {
-    this.setState ({orderNowClicked:true});
+  // show Modal, hence the orderSummary only if user is isAuthenticated
+  // if not auth then send user to auth page
+    if(this.props.isAuthenticated) {
+      this.setState ({orderNowClicked:true});
+    } else {
+      this.props.onSetAuthRedirectUrl('/checkout');
+      this.props.history.push('/auth');
+    }
   }
 
   cancelOrderHandler = () => {
@@ -79,6 +88,7 @@ class BurgerBuilder extends Component {
               <Aux>
                 <Burger ingredients={this.props.ings}/>
                   <BuildControls
+                    isAuthenticated={this.props.isAuthenticated}
                     ingredientAdded={this.props.onIngredientAdded}
                     ingredientRemoved={this.props.onIngredientRemoved}
                     disabled={disabledInfo}
@@ -115,7 +125,8 @@ const mapStateToProps = state => {
     // This is defined in index.js as an argument to combineReducers function.
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
-    error: state.burgerBuilder.error
+    error: state.burgerBuilder.error,
+    isAuthenticated: state.auth.token !== null
   };
 };
 
@@ -125,7 +136,8 @@ const mapDispatchToProps = dispatch => {
     onIngredientAdded: (name) => dispatch(actions.addIngredient(name)),
     onIngredientRemoved: (name) => dispatch (actions.removeIngredient(name)),
     onInitIngredients: () => dispatch (actions.initIngredients()),
-    onOrderInit: () => dispatch (actions.orderInit())
+    onOrderInit: () => dispatch (actions.orderInit()),
+    onSetAuthRedirectUrl: (url) => dispatch (actions.setAuthRedirectUrl(url))
   };
 };
 

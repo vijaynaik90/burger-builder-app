@@ -6,7 +6,8 @@ const initialState = {
     token: null,
     userId: null,
     error: null,
-    loading: false
+    loading: false,
+    authRedirectUrl: '/'
 };
 
 const authLogout = (state,action) => {
@@ -14,6 +15,10 @@ const authLogout = (state,action) => {
       token: null,
       userId: null
     });
+}
+
+const setAuthRedirectUrl = (state,action) => {
+    return updateObject (state, {authRedirectUrl: action.url})
 }
 
 const reducer = (state = initialState,action) => {
@@ -26,6 +31,8 @@ const reducer = (state = initialState,action) => {
         return updateObject(state, {loading: false, error: action.error});
       case actionTypes.AUTH_LOGOUT:
         return authLogout(state,action);
+      case actionTypes.SET_AUTH_REDIRECT_URL:
+          return setAuthRedirectUrl (state,action);
       default:
         return state;
     }

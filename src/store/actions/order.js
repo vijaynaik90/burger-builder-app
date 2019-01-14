@@ -26,6 +26,7 @@ export const orderBurger = (orderData,token) => {
     return dispatch => {
       dispatch(attemptOrderBurger());//action returned by attemptOrderBurger is dispatched to the store
       setTimeout( () => {
+
         axios.post('/orders.json?auth=' + token,orderData)
               .then(response => {
                 dispatch(orderBurgerSuccess(response.data.name, orderData));
@@ -64,14 +65,14 @@ export const fetchOrdersStart = () => {
   };
 };
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token,userId) => {
     return dispatch => {
       dispatch(fetchOrdersStart());
-      axios.get('/orders.json?auth='+ token)
+      const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="'+ userId + '"';
+      axios.get('/orders.json'+ queryParams)
           .then(res => {
             // transforming data here since we are getting this back from server. Thuis needs to be modified before sending it over to the reducer as action.orders.
             const retrievedOrders = [];
-            console.log("Orders:" + res.data);
             for (let key in res.data) {
               retrievedOrders.push({
                 ...res.data[key],
