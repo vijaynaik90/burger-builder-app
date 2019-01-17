@@ -86,7 +86,7 @@ export const authCheckState = () => {
         const expirationDate = new Date(localStorage.getItem('expirationDate'));
         if( expirationDate > new Date()) {
           // auth success
-          const userId = new Date(localStorage.getItem('userId'));
+          const userId = localStorage.getItem('userId');          
           dispatch(authSuccess(token,userId));
           // convert milliseconds to seconds since checkAuthTimeout expects time in seconds
           dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime())/1000));

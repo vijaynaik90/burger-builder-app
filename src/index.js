@@ -11,7 +11,8 @@ import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/auth';
 import * as serviceWorker from './serviceWorker';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// enable redux only in development. Here process is a global variable from env.js file.
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 // now we can have different slices of state. burgerBuilder and order from their respective reducers.
 const rootReducer = combineReducers({
     burgerBuilder: burgerBuilderReducer,

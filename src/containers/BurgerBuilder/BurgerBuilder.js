@@ -10,7 +10,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+// named export which gives access to this class in tests.
+export class BurgerBuilder extends Component {
 
   //gets called after the render() method.
   // Since BurgerBuilder is called from a Route class, it has access to history,location and match objects within its props.

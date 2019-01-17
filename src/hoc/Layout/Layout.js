@@ -13,7 +13,7 @@ class Layout extends Component {
       this.setState({showSideDrawer: false});
   }
   sideDrawerToggleHandler = () => {
-    // doing this may lead to unexpected behaviour due to asynchronous nature of setState method.
+    // doing below may lead to unexpected behaviour due to asynchronous nature of setState method.
     // this.setState({showSideDrawer: !this.state.showSideDrawer});
 
     // this is a cleaner way of setting the state when it depends on an old state.

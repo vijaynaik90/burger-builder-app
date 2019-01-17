@@ -3,13 +3,12 @@ import { Route,Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
-import * as actions from '../../store/actions/index';
 
 class Checkout extends Component {
   // TODO: summary of checkout. what to buy and price. Button to cancel and continue.
   // summary show the actual burger. instead of listing items.
   // removed local UI state and componentWillMount since we can fetch state from redux now
-  
+
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
   }
