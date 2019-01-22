@@ -2,7 +2,7 @@ import React from 'react';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 import { withRouter } from 'react-router-dom';
 import classes from './Burger.css';
-
+// withRouter is a special hoc which gives access to match,location and history inside props object.
 const burger = (props) => {
 //Use BurgerIngredient to build Burger.
 //below code transforms ingredient object into array

@@ -15,6 +15,10 @@ const asyncOrders = asyncComponent(() => {
   return import('./containers/Orders/Orders')
 });
 
+const asyncArchivedOrders = asyncComponent(() => {
+  return import('./containers/Orders/ArchivedOrders/ArchivedOrders')
+});
+
 const asyncAuth = asyncComponent(() => {
   return import('./containers/Auth/Auth')
 });
@@ -39,10 +43,11 @@ class App extends Component {
       </Switch>
     );
     if(this.props.isAuthenticated) {
-    routes = (
+    routes = (  
       <Switch>
         <Route path="/checkout" component={asyncCheckout} />
         <Route path="/orders" component={asyncOrders} />
+        <Route path="/archived-orders" component={asyncArchivedOrders} />
         <Route path="/logout" exact component={Logout} />
         <Route path="/auth" exact component={asyncAuth} />
         <Route path="/" exact component={BurgerBuilder} />

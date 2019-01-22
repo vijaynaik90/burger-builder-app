@@ -69,7 +69,6 @@ export class BurgerBuilder extends Component {
     // Removing code related to query params since we are managing state with redux now.
     this.props.onOrderInit();
     this.props.history.push ({ pathname: '/checkout' });
-
   }
 
   render () {
