@@ -4,9 +4,9 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
   orders: [],
   loading: false,
-  isOrdered: false,
+  isOrdered : false,
   showArchivedOrders: false,
-  orderRedirectUrl: '/orders'
+  archiveUnarchiveSuccess: false // indicates whether archive/unarchive order operation was successful
 };
 const reducer = (state = initialState,action) => {
   // TODO:
@@ -27,38 +27,40 @@ const reducer = (state = initialState,action) => {
         case actionTypes.ORDER_INIT:
             return updateObject (state, {isOrdered: false});
         case actionTypes.FETCH_ORDERS_START:
-            return updateObject (state, {loading: true});
+            return updateObject (state, {loading: true, archiveUnarchiveSuccess: false});
         case actionTypes.FETCH_ORDERS_SUCCESS:
             return updateObject (state, {
                 loading: false,
                 orders: action.orders,
-                showArchivedOrders: false
+                showArchivedOrders: false                
             });
         case actionTypes.FETCH_ORDERS_FAILURE:
             return updateObject (state, {loading: false, showArchivedOrders: false});
         // archive orders.
+        case actionTypes.FETCH_ARCHIVE_ORDERS_START:
+            return updateObject (state, {loading: true, archiveUnarchiveSuccess: false});
         case actionTypes.FETCH_ARCHIVE_ORDERS_SUCCESS:
             return updateObject (state, {
                 loading: false,
                 orders: action.orders,
-                showArchivedOrders: true
+                showArchivedOrders: true                
             });
         case actionTypes.FETCH_ARCHIVE_ORDERS_FAILURE:
             return updateObject (state, {loading: false, showArchivedOrders: true});
         // archive order
         case actionTypes.ARCHIVE_ORDER_START:
-            return updateObject (state, {loading: true});
+            return updateObject (state, {loading: true, archiveUnarchiveSuccess: false});
         case actionTypes.ARCHIVE_ORDER_FAILURE:
-            return updateObject (state, {loading: false});
+            return updateObject (state, {loading: false, archiveUnarchiveSuccess: false});
         case actionTypes.ARCHIVE_ORDER_SUCCESS:
-                return updateObject (state, {loading: false});
+                return updateObject (state, {loading: false, archiveUnarchiveSuccess: true});
         // unarchive order
         case actionTypes.UNARCHIVE_ORDER_START:
-            return updateObject (state, {loading: true});
+            return updateObject (state, {loading: true, archiveUnarchiveSuccess: false});
         case actionTypes.UNARCHIVE_ORDER_FAILURE:
-            return updateObject (state, {loading: false});
+            return updateObject (state, {loading: false, archiveUnarchiveSuccess: false});
         case actionTypes.UNARCHIVE_ORDER_SUCCESS:
-                return updateObject (state, {loading: false});
+                return updateObject (state, {loading: false, archiveUnarchiveSuccess: true});
         default:
             return state;
     }

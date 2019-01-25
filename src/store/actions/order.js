@@ -45,44 +45,50 @@ export const orderInit = () => {
     };
 };
 
-export const fetchOrderSuccess = (orders) => {
-  return {
-    type: actionTypes.FETCH_ORDERS_SUCCESS,
-    orders: orders
-  };
-};
-
-export const fetchOrderFailure = (error) => {
-  return {
-    type: actionTypes.FETCH_ORDERS_FAILURE,
-    error: error
-  };
-};
-
-export const fetchArchiveOrderSuccess = (orders) => {
-  return {
-    type: actionTypes.FETCH_ARCHIVE_ORDERS_SUCCESS,
-    orders: orders
-  };
-};
-
-export const fetchArchiveOrderFailure = (error) => {
-  return {
-    type: actionTypes.FETCH_ARCHIVE_ORDERS_FAILURE,
-    error: error
-  };
-};
-
 export const fetchOrdersStart = () => {
   return {
       type: actionTypes.FETCH_ORDERS_START
   };
 };
 
+export const fetchOrdersSuccess = (orders) => {
+  return {
+    type: actionTypes.FETCH_ORDERS_SUCCESS,
+    orders: orders
+  };
+};
+
+export const fetchOrdersFailure = (error) => {
+  return {
+    type: actionTypes.FETCH_ORDERS_FAILURE,
+    error: error
+  };
+};
+
+export const fetchArchiveOrdersStart = () => {
+  return {
+      type: actionTypes.FETCH_ARCHIVE_ORDERS_START
+  };
+};
+export const fetchArchiveOrdersSuccess = (orders) => {
+  return {
+    type: actionTypes.FETCH_ARCHIVE_ORDERS_SUCCESS,
+    orders: orders
+  };
+};
+
+export const fetchArchiveOrdersFailure = (error) => {
+  return {
+    type: actionTypes.FETCH_ARCHIVE_ORDERS_FAILURE,
+    error: error
+  };
+};
+
+
 // fetch order where userId=userId and archived=true
 export const fetchOrders = (token,userId,fetchArchivedOrders) => {
     return dispatch => {
-      dispatch(fetchOrdersStart());
+      fetchArchivedOrders ? dispatch(fetchArchiveOrdersStart()) : dispatch(fetchOrdersStart());
       const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="'+ userId + '"';
       axios.get('/orders.json'+ queryParams)
           .then(res => {
@@ -99,8 +105,8 @@ export const fetchOrders = (token,userId,fetchArchivedOrders) => {
                   });
                 }
               }
-            console.log("retrievedOrders:"+ JSON.stringify(retrievedOrders));
-            dispatch(fetchOrderSuccess(retrievedOrders));
+            // console.log("retrievedOrders:"+ JSON.stringify(retrievedOrders));
+            dispatch(fetchOrdersSuccess(retrievedOrders));
             }//if fetchArchivedOrders is true then fetch orders where archived: true
             else {
               for (let key in res.data) {
@@ -111,13 +117,13 @@ export const fetchOrders = (token,userId,fetchArchivedOrders) => {
                   });
                 }
               }
-            console.log("retrievedOrders:"+ JSON.stringify(retrievedOrders));
-            dispatch(fetchArchiveOrderSuccess(retrievedOrders));
+            // console.log("retrievedOrders:"+ JSON.stringify(retrievedOrders));
+            dispatch(fetchArchiveOrdersSuccess(retrievedOrders));
             }
             
           })
           .catch(err => {
-           fetchArchivedOrders ? dispatch(fetchArchiveOrderFailure(err)): dispatch(fetchOrderFailure(err));
+           fetchArchivedOrders ? dispatch(fetchArchiveOrdersFailure(err)): dispatch(fetchOrdersFailure(err));
           })
     };
 };

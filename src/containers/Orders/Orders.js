@@ -5,12 +5,21 @@ import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Button from '../../components/UI/Button/Button';
 
 class Orders extends Component {
   componentDidMount () {
     this.props.onFetchOrders(this.props.token,this.props.userId,false);
   }
+  componentWillReceiveProps(nextProps) {
+    if( nextProps.archiveOrderSuccess !== this.props.archiveOrderSuccess) {
+      // fetch updated orders after current order is archived.
+      console.log ("Inside [Orders.js] fetch updated orders");
+      this.props.onFetchOrders(this.props.token,this.props.userId,false);
+    }
+  }
 
+  // none , start, done
   state = {
     archiveButtonClicked : false
   }
@@ -24,8 +33,6 @@ class Orders extends Component {
     this.props.onArchiveOrder(this.props.token,id,putData);
     // closes the modal
     this.setState({archiveButtonClicked:false});
-    //fetches supdated orders
-    // TODO: fetch updated orders after current order is archived.
   };
 
   toggleArchiveClickedHandler = () => {
@@ -34,6 +41,9 @@ class Orders extends Component {
 
   cancelArchiveHandler = () => {
     this.setState({archiveButtonClicked:false});
+  };
+  viewArchivedOrders = () => {
+    this.props.history.push ({ pathname: '/archived-orders' });
   };
   // add a modal which says something like are you sure?
   render () {
@@ -54,6 +64,7 @@ class Orders extends Component {
               />
           )
           )}
+          <Button clicked={this.viewArchivedOrders} btnType="Success"> View Archived Orders </Button>
         </div>
       );
     }
@@ -65,9 +76,10 @@ const mapStateToProps = (state) => {
     return {
           orders: state.order.orders,
           loading: state.order.loading,
+          archiveOrderSuccess: state.order.archiveUnarchiveSuccess,
           showArchivedOrders: state.order.showArchivedOrders,
           token: state.auth.token,
-          userId: state.auth.userId
+          userId: state.auth.userId          
     };
 };
 

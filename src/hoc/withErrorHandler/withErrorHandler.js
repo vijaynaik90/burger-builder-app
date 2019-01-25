@@ -16,6 +16,7 @@ const withErrorHandler = (WrappedComponent,axios) => {
     componentWillMount () {
       //global interceptors to handle errors
       // clear any errors. so that whenever we send any requests then error is null
+      // also need to always return the request else will block the request.
       console.log('[withErrorHandler]Component WILL mount');
       this.reqInterceptor = axios.interceptors.request.use(req => {
         this.setState({error: null});
