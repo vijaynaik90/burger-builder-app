@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import Input from  '../../components/UI/Input/Input';
-import Button from '../../components/UI/Button/Button';
+import ButtonComponent from '../../components/UI/Button/Button';
 import * as actions from '../../store/actions/index';
 import classes from './Auth.css';
 import Spinner from '../../components/UI/Spinner/Spinner';
@@ -115,11 +116,11 @@ class Auth extends Component {
             {errorMessage}
             <form onSubmit={this.submitHandler}>
               {form}
-              <Button btnType="Success" >SUBMIT</Button>
+              <Button bsStyle="success" bsSize="medium">SUBMIT</Button>
             </form>
-            <Button
+            <ButtonComponent
               clicked={this.switchAuthModehandler}
-              btnType="Danger">Switch To {this.state.isSignUp ? 'SIGNIN' : 'SIGNUP'}</Button>
+              btnType="Danger">Switch To {this.state.isSignUp ? 'SIGNIN' : 'SIGNUP'}</ButtonComponent>
           </div>
         );
     }

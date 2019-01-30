@@ -155,7 +155,7 @@ export const archiveOrder = (token,orderId,orderData) => {
     return dispatch => {
       dispatch(archiveOrderStart());
       //update archived property to true, remaining things are the same.
-      //const queryParams = '?auth=' + token + '&orderBy="orderId"&equalTo="'+ orderId + '"';
+      console.log("Order id to archive:"+ orderId);
       axios.put('/orders/' + orderId + '/archived.json?auth='+token,orderData)
           .then(res => {
             // transforming data here since we are getting this back from server. Thuis needs to be modified before sending it over to the reducer as action.orders.

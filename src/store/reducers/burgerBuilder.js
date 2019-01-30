@@ -31,7 +31,7 @@ const reducer = (state = initialState,action) => {
             building: true
           });
     case actionTypes.REMOVE_INGREDIENT:
-        const removeUpdatedIngredient = { [action.ingredientName] : state.ingredients[action.ingredientName] + 1 };
+        const removeUpdatedIngredient = { [action.ingredientName] : state.ingredients[action.ingredientName] - 1 };
         const removeUpdatedIngredients = updateObject(state.ingredients, removeUpdatedIngredient);
         return updateObject(state, {
             ingredients: removeUpdatedIngredients,

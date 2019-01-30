@@ -1,74 +1,91 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import Button from '../../components/UI/Button/Button';
+import ButtonComponent from '../../components/UI/Button/Button';
+import Modal from '../../components/UI/Modal/Modal';
+import Aux from '../../hoc/Aux/Aux';
 
 class Orders extends Component {
   componentDidMount () {
+    console.log('[Orders.js] componentDidMount');
     this.props.onFetchOrders(this.props.token,this.props.userId,false);
   }
+  
   componentWillReceiveProps(nextProps) {
     if( nextProps.archiveOrderSuccess !== this.props.archiveOrderSuccess) {
       // fetch updated orders after current order is archived.
-      console.log ("Inside [Orders.js] fetch updated orders");
+      console.log ("Inside [Orders.js] componentWillReceiveProps");
       this.props.onFetchOrders(this.props.token,this.props.userId,false);
     }
   }
 
-  // none , start, done
   state = {
-    archiveButtonClicked : false
+    archiveButtonClicked : false,
+    orderId: null
   }
   // Pass order.id into for archive operation.
   // TODO: redirect properly to /orders after archiving order.
-  archiveOrderHandler = (id) => {
+  archiveOrderHandler = () => {
     //archive selected order
-    let putData = {
-      isArchived: true
-    };
-    this.props.onArchiveOrder(this.props.token,id,putData);
-    // closes the modal
-    this.setState({archiveButtonClicked:false});
+    console.log("[Orders.js] Order id to archive:"+ this.state.orderId);
+    if(this.state.orderId !== null){
+      let putData = {
+        isArchived: true
+      };
+      this.props.onArchiveOrder(this.props.token,this.state.orderId,putData);
+      // closes the modal
+      this.setState({archiveButtonClicked:false,orderId: null});
+    }    
   };
 
-  toggleArchiveClickedHandler = () => {
-    this.setState({archiveButtonClicked: true});
+  toggleArchiveClickedHandler = (id) => {
+    this.setState({archiveButtonClicked: true,orderId: id});
   };
 
   cancelArchiveHandler = () => {
-    this.setState({archiveButtonClicked:false});
+    this.setState({archiveButtonClicked:false,orderId: null});
   };
+
   viewArchivedOrders = () => {
     this.props.history.push ({ pathname: '/archived-orders' });
   };
-  // add a modal which says something like are you sure?
+  
   render () {
-    let orders = <Spinner />;
+    console.log("[Orders.js] Rendering Orders.js");
+    
+    let orders = <Spinner />;    
     if (!this.props.loading) {
       orders = (
         <div>
-          {this.props.orders.map(order => (
-          <Order
-              ingredients={order.ingredients}
-              totalPrice={order.price}
-              key={order.id}
-              archiveOrderClicked={this.toggleArchiveClickedHandler}
-              archiveOrderCancelled={this.cancelArchiveHandler}
-              archiveClickedStatus={this.state.archiveButtonClicked}
-              arhiveOrderContinue={() => this.archiveOrderHandler(order.id)}
-              showArchiveFlag={this.props.showArchivedOrders}
-              />
-          )
+          {this.props.orders.map(order => {
+          return  <Order
+                    ingredients={order.ingredients}
+                    key={order.id}
+                    totalPrice={order.price}                    
+                    archiveOrderClicked={() => this.toggleArchiveClickedHandler(order.id)}
+                    showArchiveFlag={this.props.showArchivedOrders}
+                  />;
+            }
           )}
-          <Button clicked={this.viewArchivedOrders} btnType="Success"> View Archived Orders </Button>
+          <Button onClick={this.viewArchivedOrders} bsStyle="success"> View Archived Orders </Button>
         </div>
       );
     }
-    return orders;
+    return (
+      <Aux>
+        <Modal show={this.state.archiveButtonClicked} modalClosed={this.cancelArchiveHandler}>
+          <p> Are you sure you want to archive order?</p>
+          <ButtonComponent clicked={this.cancelArchiveHandler} btnType="Danger">NO</ButtonComponent>
+          <ButtonComponent clicked={this.archiveOrderHandler} btnType="Success">YES</ButtonComponent>
+        </Modal>
+        {orders}
+      </Aux>
+    );
   }
 }
 

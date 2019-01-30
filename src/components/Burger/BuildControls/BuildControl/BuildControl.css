@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 5px 0;
+    font-size: 1.3em
 }
 
 .BuildControl button {
@@ -33,6 +34,7 @@
     padding: 10px;
     font-weight: bold;
     width: 80px;
+    font-size: 1.2em    
 }
 
 .BuildControl .Less {

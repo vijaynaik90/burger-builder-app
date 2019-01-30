@@ -33,9 +33,7 @@ class ArchivedOrders extends Component {
         };
         this.props.onUnarchiveOrder(this.props.token,id,putData);
         // closes the modal
-        this.setState({unarchiveButtonClicked: true});
-        //fetches updated orders
-        // TODO: fetch updated orders after current order is archived.
+        this.setState({unarchiveButtonClicked: true});                
       };
 
     render() {

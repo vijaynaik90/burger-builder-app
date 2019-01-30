@@ -8,8 +8,9 @@
   box-sizing: border-box;
 }
 
-@@media (min-width: 600px) {
+@media (min-width: 600px) {
   .Auth {
       width: 500px;
+      font-size: 1.3em
   }
 }

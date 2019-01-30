@@ -106,7 +106,8 @@ export class BurgerBuilder extends Component {
        orderSummary = <Spinner />;
      }
     }
-
+    console.log("[BurgerBuilder.js] render BurgerBuilder");
+    
     return (
       //return some JSX code
       <Aux>

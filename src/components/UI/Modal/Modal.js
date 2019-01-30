@@ -14,6 +14,8 @@ class Modal extends Component {
     // Hence we need to check for =====> nextProps.children !== this.props.children
       return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
   }
+  // Here if props.show is true then translateY(0) which is the postion thats there in css
+  // if props.show is false then -100vh means viewport height so slide outside of screen
   render () {
     return (
       <Aux>
