@@ -11,8 +11,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../../hoc/Aux/Aux';
 
 class Orders extends Component {
-  componentDidMount () {
-    console.log('[Orders.js] componentDidMount');
+  componentDidMount () {    
     this.props.onFetchOrders(this.props.token,this.props.userId,false);
   }
   
@@ -28,8 +27,7 @@ class Orders extends Component {
     archiveButtonClicked : false,
     orderId: null
   }
-  // Pass order.id into for archive operation.
-  // TODO: redirect properly to /orders after archiving order.
+  // Pass order.id into for archive operation.  
   archiveOrderHandler = () => {
     //archive selected order
     console.log("[Orders.js] Order id to archive:"+ this.state.orderId);

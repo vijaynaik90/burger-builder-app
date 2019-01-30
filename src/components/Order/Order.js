@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './Order.css';
-import ButtonComponent from '../UI/Button/Button';
-import Modal from '../UI/Modal/Modal';
-import Aux from '../../hoc/Aux/Aux';
 import { Button } from 'react-bootstrap';
 
 const order = (props) => {
