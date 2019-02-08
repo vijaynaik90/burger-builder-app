@@ -41,6 +41,12 @@ class Orders extends Component {
     }    
   };
 
+  orderDetailsHandler = (id) => {
+    //show select order details
+    //TODO: make an axios request to fetch order or can pass order as an argument.
+    this.props.history.push ({pathname: '/orders/' + id});
+  }
+
   toggleArchiveClickedHandler = (id) => {
     this.setState({archiveButtonClicked: true,orderId: id});
   };
@@ -59,18 +65,20 @@ class Orders extends Component {
     let orders = <Spinner />;    
     if (!this.props.loading) {
       orders = (
-        <div>
+        <div style={{padding: '10px 60px'}}>
           {this.props.orders.map(order => {
-          return  <Order
-                    ingredients={order.ingredients}
-                    key={order.id}
-                    totalPrice={order.price}                    
-                    archiveOrderClicked={() => this.toggleArchiveClickedHandler(order.id)}
-                    showArchiveFlag={this.props.showArchivedOrders}
-                  />;
-            }
+          return <Order
+                  ingredients={order.ingredients}
+                  key={order.id}                
+                  totalPrice={order.price}                    
+                  archiveOrderClicked={() => this.toggleArchiveClickedHandler(order.id)}
+                  showArchiveFlag={this.props.showArchivedOrders}
+                  showOrderDetails = {() => this.orderDetailsHandler(order.id)}
+                />;
+          }
           )}
-          <Button onClick={this.viewArchivedOrders} bsStyle="success"> View Archived Orders </Button>
+          <br />
+          <Button onClick={this.viewArchivedOrders} bsSize="large" bsStyle="success"> View Archived Orders </Button>
         </div>
       );
     }
@@ -81,7 +89,7 @@ class Orders extends Component {
           <ButtonComponent clicked={this.cancelArchiveHandler} btnType="Danger">NO</ButtonComponent>
           <ButtonComponent clicked={this.archiveOrderHandler} btnType="Success">YES</ButtonComponent>
         </Modal>
-        {orders}
+        {orders}        
       </Aux>
     );
   }

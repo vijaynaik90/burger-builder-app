@@ -16,7 +16,7 @@
 .NavigationItem a:hover,
 .NavigationItem a:active,
 .NavigationItem a.active {
-  color: #40A4C8;
+  color: rgb(64, 200, 121);
 }
 /* media queries are styles for desktop devices */
 @media (min-width: 500px) {
@@ -38,7 +38,7 @@
   .NavigationItem a:hover,
   .NavigationItem a:active,
   .NavigationItem a.active {
-    background-color: rgba(37, 15, 235, 0.555);
+    background-color: rgba(77, 235, 15, 0.979);
     border-bottom: 4px solid #40A4C8;
     color: white;
   }

@@ -1,0 +1,19 @@
+.App {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-image: url('./assets/images/burger-background.jpg');
+    height: 100vh;
+    background-position: center;
+    background-repeat: repeat;
+    font-size: 1.25em
+}
+
+@media (max-width: 480px) {
+  .App {
+    background-image: url('./assets/images/burger-background.jpg');
+    background-repeat: no-repeat;
+    background-size: contain ;
+  }
+}

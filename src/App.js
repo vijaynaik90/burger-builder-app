@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import classes from './App.css';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Logout from './containers/Auth/Logout/logout';
 import * as actions from './store/actions/index';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
+import Home from './containers/Home/Home';
+import Footer from './components/UI/Footer/Footer';
 
 const asyncCheckout = asyncComponent(() => {
   return import('./containers/Checkout/Checkout')
@@ -21,6 +24,10 @@ const asyncArchivedOrders = asyncComponent(() => {
 
 const asyncAuth = asyncComponent(() => {
   return import('./containers/Auth/Auth')
+});
+
+const asyncOrderDetails = asyncComponent(() => {
+  return import('./containers/Orders/OrderDetails/OrderDetails')
 });
 class App extends Component {
 
@@ -38,15 +45,18 @@ class App extends Component {
     let routes  = (
       <Switch>
         <Route path="/auth" exact component={asyncAuth} />
-        <Route path="/" exact component={BurgerBuilder} />
+        <Route path="/" exact component={Home} />
         <Redirect to="/" />
       </Switch>
     );
     if(this.props.isAuthenticated) {
-    routes = (  
+    routes = (
       <Switch>
         <Route path="/checkout" component={asyncCheckout} />
-        <Route path="/orders" component={asyncOrders} />
+        <Route path="/orders" exact component={asyncOrders} />
+        <Route
+                path='/orders/:id'
+                component= {asyncOrderDetails} />
         <Route path="/archived-orders" component={asyncArchivedOrders} />
         <Route path="/logout" exact component={Logout} />
         <Route path="/auth" exact component={asyncAuth} />
@@ -56,10 +66,11 @@ class App extends Component {
     );
     }
     return (
-      <div>
+      <div className={classes.App}>
         <Layout>
           {routes}
         </Layout>
+        <Footer> <span><h2> This is footer</h2></span> </Footer>
       </div>
     );
   }

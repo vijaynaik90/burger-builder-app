@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Order.css';
-import { Button } from 'react-bootstrap';
+import { ButtonToolbar,Button } from 'react-bootstrap';
 
 const order = (props) => {
   const ingredients = [];
@@ -20,14 +20,22 @@ const order = (props) => {
               </span>;
   });
   let archiveButton = (
-    <Button
-      onClick={props.archiveOrderClicked}
-      bsStyle="warning">Archive Order</Button>
+    <ButtonToolbar>
+      <Button
+        onClick={props.archiveOrderClicked}
+        bsStyle="warning">Archive Order
+      </Button>
+      <Button bsStyle="primary"
+              onClick={props.showOrderDetails} >View Order Details
+        </Button>
+    </ButtonToolbar>
+    
   );
   if(props.showArchiveFlag){
-    archiveButton = (
-      <Button bsStyle="success"
-        onClick={props.unarchiveOrderClicked}>Unarchive Order</Button>
+    archiveButton = (      
+        <Button bsStyle="success"
+                onClick={props.unarchiveOrderClicked}>Unarchive Order
+        </Button>
     );
   }
 // if flag is false then show Archived orders button
