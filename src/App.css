@@ -4,9 +4,9 @@
     -o-background-size: cover;
     background-size: cover;
     background-image: url('./assets/images/burger-background.jpg');
-    height: 100vh;
     background-position: center;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-size: 1.25em
 }
 
