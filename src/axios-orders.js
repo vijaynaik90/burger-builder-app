@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { BASE_URL } from './shared/constants';
 
 const instance = axios.create ({
-  baseURL:'https://burger-builder-baefa.firebaseio.com/'
+  baseURL: BASE_URL
 });
 
 export default instance;

@@ -3,10 +3,11 @@
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    background-image: url('./assets/images/burger-background.jpg');
+    /* background-image: url('./assets/images/burger-background.jpg'); */
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background: url('./assets/images/burger-background.jpg') no-repeat center center fixed;
     font-size: 1.25em
 }
 

@@ -14,6 +14,7 @@ const input = (props) => {
     case 'input':
       inputElement = <input
         className={inputClasses.join(' ')}
+        // label="Email Address"
         value={props.value}
         onChange={props.changed}
         {...props.elementconfig} />

@@ -13,12 +13,11 @@ const reducer = (state = initialState,action) => {
   // 1) Add delete an order action as well so that users can delete orders.
   // 2) Make each order viewable so that user can see ingredients plus other details such as address etc.
     switch (action.type) {
-        case actionTypes.ORDER_BURGER_SUCCESS:
-            const updatedOrderData = updateObject (action.orderData, {id: action.orderId});
+        case actionTypes.ORDER_BURGER_SUCCESS:            
                 return updateObject (state, {
                 loading: false,
                 isOrdered: true,
-                orders: state.orders.concat(updatedOrderData)
+                orders: state.orders.concat(action.orderData)
             });
         case actionTypes.ORDER_BURGER_FAILURE:
             return updateObject (state, {loading: false});

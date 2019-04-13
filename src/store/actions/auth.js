@@ -1,5 +1,7 @@
 import * as actionTypes from './actionTypes';
-import axios from 'axios';
+import axios from '../../axios-orders';
+import { ACCESS_TOKEN } from '../../shared/constants';
+import { getHeaders } from '../../shared/utility';
 export const authStart = () => {
     return {
       type: actionTypes.AUTH_START
@@ -21,40 +23,40 @@ export const authFailure = (error) => {
     };
 };
 // isSignUp is used to identify sign in or sign up
-export const attemptAuth = (email, password, isSignUp) => {
+export const attemptAuth = (authData, isSignUp) => {
     return dispatch => {
         dispatch(authStart());
-        const authData = {
-          email: email,
-          password: password,
-          returnSecureToken: true
-        }
-        let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyB_gD5yrWom_glSX99atyl2KAbZpGNOh-M'
+        let url = '/auth/signup'
         if(!isSignUp){
-            url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyB_gD5yrWom_glSX99atyl2KAbZpGNOh-M'
+            url = '/auth/signin'
         }
+        axios.defaults.headers = getHeaders();
         axios.post (url,authData)
               .then(res => {
-                console.log(res);
                 //convert current date to milliseconds and then add expiresIn time in milliseconds.
-                const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000);
-                localStorage.setItem('token', res.data.idToken);
-                localStorage.setItem('expirationDate', expirationDate);
-                localStorage.setItem('userId', res.data.localId);
-                dispatch(authSuccess(res.data.idToken,res.data.localId));
-                dispatch(checkAuthTimeout(res.data.expiresIn));
+                // const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000);                
+                if(isSignUp && res.status === 201){
+                  localStorage.setItem(ACCESS_TOKEN, res.data.accessToken);
+                  localStorage.setItem('userId', res.data.userId);
+                  dispatch(authSuccess(res.data.accessToken,res.data.userId));
+                }
+                if(!isSignUp && res.status === 200) {
+                  localStorage.setItem(ACCESS_TOKEN, res.data.accessToken);
+                  localStorage.setItem('userId', res.data.userId);
+                  dispatch(authSuccess(res.data.accessToken,res.data.userId));
+                }
               })
               .catch ( err => {
-                  console.log(err);
-                  dispatch(authFailure(err.response.data.error));//after aanalyzing the err object given by firebase. found the exact path to error message.
+                //TODO: add 401 case                                  
+                  dispatch(authFailure(err));//after aanalyzing the err object given by firebase. found the exact path to error message.
               })
       };
 };
 
 export const logout = () => {
   //remove the localStorage tokens from the browser upon logout.
-  localStorage.removeItem('token');
-  localStorage.removeItem('expirationDate');
+  localStorage.removeItem(ACCESS_TOKEN);
+  // localStorage.removeItem('expirationDate');
   localStorage.removeItem('userId');
     return {
       type: actionTypes.AUTH_LOGOUT
@@ -79,21 +81,28 @@ export const setAuthRedirectUrl = (url) => {
 
 export const authCheckState = () => {
   return dispatch => {
-      const token = localStorage.getItem('token');
-      if(!token) {
+      const token = localStorage.getItem(ACCESS_TOKEN);
+      const userId = localStorage.getItem('userId');
+      if(!token) {        
         dispatch(logout());
       } else {
-        const expirationDate = new Date(localStorage.getItem('expirationDate'));
-        if( expirationDate > new Date()) {
-          // auth success
-          const userId = localStorage.getItem('userId');          
-          dispatch(authSuccess(token,userId));
-          // convert milliseconds to seconds since checkAuthTimeout expects time in seconds
-          dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime())/1000));
-        } else {
-          // logout since token has become stale.
-          dispatch(logout());
-        }
+        axios.defaults.headers = getHeaders();
+        // call /api/user/me and if it returns 401 then logout user
+        axios.get('/v1/user/me')
+              .then(response => {
+                if(response.status !== 200){
+                  if(response.status === 401){
+                    dispatch(logout());
+                  }
+                }else{
+                  dispatch(authSuccess(token,userId));
+                }
+              })
+              .catch(err => {
+                //TODO: reset localStorage when cannot connect to backend server.
+                dispatch(authFailure(err));
+                dispatch(logout());
+              })
       }
   };
 };

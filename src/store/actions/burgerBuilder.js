@@ -5,11 +5,18 @@ export const initIngredients = () => {
 // we can return another function here for which we receive dispatch function as an argument. dispatch can then be used within the function body due to react-thunk.
   return dispatch => {
     setTimeout ( () => {
-      axios.get('https://burger-builder-baefa.firebaseio.com/ingredients.json')
+      axios.get('/v1/burger/init')
            .then(response => {
-              dispatch(setIngredients(response.data));
+             let igObject = response.data;
+             let igArray = igObject.ingredients
+              // convert [{"name":"Bacon","quantity":0}] to {"bacon":0}
+             let ingredients = igArray.reduce((obj, item) => (obj[item.name] = item.quantity, obj) ,{}
+              );
+              dispatch(setIngredients(ingredients));
             })
             .catch(error => {
+              //TODO: reset localStorage when cannot connect to backend server.
+              console.log("Error init Ingredients",error);
               dispatch(initIngredientsError());
             });
     });

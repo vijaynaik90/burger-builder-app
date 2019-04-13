@@ -4,20 +4,14 @@ const orderDetail = (props) => {
 
     let panelDetails = null;
 
-    const ingredients = [];
+    let ingredients = props.order.burger.ingredients;
 
-  for (let ingredient in props.order.ingredients) {
-    ingredients.push({
-        name: ingredient,
-        quantity: props.order.ingredients[ingredient]
-      });
-  }
+  
     switch (props.type) {
         case ('igs'):
             panelDetails = ingredients.map(ig => {
-                return (<p>
+                return (<p key={ig.name}>
                             <strong
-                                key={ig.name}
                                 style={{textTransform: 'capitalize'}}>{ig.name}:</strong> {ig.quantity}
                         </p>);
               });
@@ -25,10 +19,12 @@ const orderDetail = (props) => {
         case ('shipping'):
             panelDetails = (
                 <p>                
-                    <strong>Name:</strong> {props.order.orderData.name}<br/>
-                    {props.order.orderData.street}<br/>
-                    {props.order.orderData.country}<br/>
-                    {props.order.orderData.zipCode}<br/>
+                    <strong>Name:</strong> {props.order.order_data.name}<br/>
+                    <strong>Address:</strong> <br />
+                        {props.order.order_data.street}<br/>
+                        {props.order.order_data.country}<br/>
+                        {props.order.order_data.zip_code}<br/>
+                    <strong>Email: </strong> {props.order.order_data.email}
                 </p>
             );
             break;
@@ -37,7 +33,7 @@ const orderDetail = (props) => {
         case ('prefs'):
             panelDetails = (
                 <p>
-                    <strong>Delivery Method:</strong> {props.order.orderData.deliveryMethod}<br/>
+                    <strong>Delivery Method:</strong> {props.order.order_data.delivery_method}<br/>
                 </p>
             );
             break;

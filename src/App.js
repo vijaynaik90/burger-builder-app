@@ -9,6 +9,7 @@ import * as actions from './store/actions/index';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
 import Home from './containers/Home/Home';
 import Footer from './components/UI/Footer/Footer';
+import Signup from './containers/Auth/Signup/Signup';
 
 const asyncCheckout = asyncComponent(() => {
   return import('./containers/Checkout/Checkout')
@@ -23,7 +24,7 @@ const asyncArchivedOrders = asyncComponent(() => {
 });
 
 const asyncAuth = asyncComponent(() => {
-  return import('./containers/Auth/Auth')
+  return import('./containers/Auth/Login/Login')
 });
 
 const asyncOrderDetails = asyncComponent(() => {
@@ -45,7 +46,8 @@ class App extends Component {
     let routes  = (
       <Switch>
         <Route path="/auth" exact component={asyncAuth} />
-        <Route path="/" exact component={Home} />
+        <Route path="/signup" exact component={Signup} />
+        <Route path="/" exact component={BurgerBuilder} />
         <Redirect to="/" />
       </Switch>
     );
@@ -60,12 +62,13 @@ class App extends Component {
         <Route path="/archived-orders" component={asyncArchivedOrders} />
         <Route path="/logout" exact component={Logout} />
         <Route path="/auth" exact component={asyncAuth} />
+        <Route path="/signup" exact component={Signup} />
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to="/" />
       </Switch>
     );
     }
-    return (
+    return (         
       <div className={classes.App}>
         <Layout>
           {routes}

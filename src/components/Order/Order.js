@@ -3,15 +3,8 @@ import classes from './Order.css';
 import { ButtonToolbar,Button } from 'react-bootstrap';
 
 const order = (props) => {
-  const ingredients = [];
 
-  for (let ingredient in props.ingredients) {
-    ingredients.push({
-        name: ingredient,
-        quantity: props.ingredients[ingredient]
-      });
-  }
-  const ingredientOutput = ingredients.map(ig => {
+  const ingredientOutput = props.ingredients.map(ig => {
     return <span
               key={ig.name}
               style={{textTransform: 'capitalize',display: 'inline-block',
@@ -22,7 +15,7 @@ const order = (props) => {
   let archiveButton = (
     <ButtonToolbar>
       <Button
-        onClick={props.archiveOrderClicked}
+        onClick={props.buttonClicked}
         bsStyle="warning">Archive Order
       </Button>
       <Button bsStyle="primary"
@@ -31,10 +24,10 @@ const order = (props) => {
     </ButtonToolbar>
     
   );
-  if(props.showArchiveFlag){
+  if(props.displayArchiveOrders){
     archiveButton = (      
         <Button bsStyle="success"
-                onClick={props.unarchiveOrderClicked}>Unarchive Order
+                onClick={props.buttonClicked}>Unarchive Order
         </Button>
     );
   }

@@ -5,6 +5,7 @@ import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import OrderDetail from '../../../components/Order/OrderDetail/OrderDetail';
+import { getHeaders } from '../../../shared/utility';
 
 const items = [
     {label:'Burger Ingredients', type :'igs'},
@@ -28,10 +29,10 @@ class OrderDetails extends Component {
 
     loadOrder() {
         if(this.props.match.params.id) {
-            if( !this.state.orderData || (this.state.orderData && this.state.orderData.id !== +this.props.match.params.id)) {
-                axios.get( '/orders/' + this.props.match.params.id + '.json?auth='+ this.props.token )
+            if( !this.state.order || (this.state.order && this.state.order.id !== +this.props.match.params.id)) {
+                axios.defaults.headers = getHeaders();
+                axios.get( '/v1/orders/' + this.props.match.params.id)
                 .then( response => {
-                    console.log(response.data);
                     this.setState( { order: response.data } );
                 } ).catch(err => {
                     console.log(err);
@@ -125,8 +126,7 @@ class OrderDetails extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {
-        token: state.auth.token,
+    return {        
         userId: state.auth.userId
     };
 };

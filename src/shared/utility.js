@@ -1,3 +1,5 @@
+import { ACCESS_TOKEN } from './constants';
+
 export const updateObject = (oldState, updatedValues) => {
     return {
       ...oldState,
@@ -31,4 +33,35 @@ export const checkValidity = (value,rules) => {
   }
 
   return isValid;
+};
+
+export const inputStateChange = (controls, event, controlName) => {
+// this will not not create a deep clone i.e next objects within orderForm will still be mutable.
+  // Eg: If you change updatedOrderForm.name then this.state.orderForm.name will also be changed.
+  const updatedControls = updateObject(controls, {
+    [controlName]: updateObject (controls[controlName],{
+      value: event.target.value,
+      valid: checkValidity(event.target.value, controls[controlName].validation),
+      touched: true
+    })
+  });
+  return updatedControls;
+};
+
+export const getHeaders = () => {
+  let headers = {
+      'Content-Type': 'application/json'
+    };  
+  if(localStorage.getItem(ACCESS_TOKEN)) {   
+    headers.Authorization = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }  
+  return headers;
+};
+
+export const modifyOrderData = (oldKey1, newKey1,oldKey2,newKey2,{[oldKey1]: old1,[oldKey2]: old2, ...others}) => {
+  return {
+    [newKey1]: old1,
+    [newKey2]: old2,
+    ...others
+  };
 };

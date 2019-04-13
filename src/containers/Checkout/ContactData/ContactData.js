@@ -83,14 +83,14 @@ class ContactData extends Component {
           elementType: 'select',
           elementConfig: {
             options: [
-              {value:'fastest',displayValue:'Fastest'},
-              {value:'cheapest',displayValue:'Cheapest'}
+              {value:'FASTEST',displayValue:'Fastest'},
+              {value:'CHEAPEST',displayValue:'Cheapest'}
             ]
           },
           validation: {
             valid:true
           },
-          value: 'fastest',
+          value: 'FASTEST',
           touched:false
         }
     },formIsValid: false
@@ -184,7 +184,7 @@ class ContactData extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-      onOrderBurger: (orderData, token) => dispatch(orderBurgerActions.orderBurger(orderData, token))
+      onOrderBurger: (postData) => dispatch(orderBurgerActions.orderBurger(postData))
     };
 
 };

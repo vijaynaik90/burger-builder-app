@@ -12,7 +12,7 @@ const burger = (props) => {
   let transformedIngredients = Object.keys(props.ingredients)
                                         .map(ingredient =>{
                                           return [...Array(props.ingredients[ingredient])].map((_,i) => {
-                                              return <BurgerIngredient key={ingredient + i} type={ingredient}/>;
+                                              return <BurgerIngredient key={ingredient + i} name={ingredient}/>;
                                           });
                                         }).reduce((arr,el) => {
                                           return arr.concat(el);
@@ -23,9 +23,9 @@ const burger = (props) => {
   }
   return(
     <div className={classes.Burger}>
-      <BurgerIngredient type="bread-top"/>
+      <BurgerIngredient name="bread-top"/>
       {transformedIngredients}
-      <BurgerIngredient type="bread-bottom"/>
+      <BurgerIngredient name="bread-bottom"/>
     </div>
   );
 };
