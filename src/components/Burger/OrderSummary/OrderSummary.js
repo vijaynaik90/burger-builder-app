@@ -12,7 +12,7 @@ export const orderSummary = (props) => {
                                     </li>
                                   });
   return (
-    <Aux>
+    <Aux style={{fontSize:'12px'}}>
         <h3> Your Order</h3>
         <p><strong> Total Price: {props.price.toFixed(2)}</strong></p>
         <p> Burger Ingredients </p>

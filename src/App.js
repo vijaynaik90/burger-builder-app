@@ -7,7 +7,7 @@ import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Logout from './containers/Auth/Logout/logout';
 import * as actions from './store/actions/index';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
-import Home from './containers/Home/Home';
+// import Home from './containers/Home/Home';
 import Footer from './components/UI/Footer/Footer';
 import Signup from './containers/Auth/Signup/Signup';
 

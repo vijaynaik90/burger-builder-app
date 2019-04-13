@@ -4,10 +4,8 @@ import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import { NavLink,Redirect } from 'react-router-dom';
 import * as yup from 'yup';
-// import Spinner from '../../../components/UI/Spinner/Spinner';
-import classes from './Login.css';
 import * as actions from '../../../store/actions/index';
-import { Form,Input,Title,Button,Label,Text,Container, OuterDiv,InnerDiv} from './login-styled';
+import {Input,Title,Button,Label,Text} from './login-styled';
 
 class Login extends Component {
     state = {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink,Redirect } from 'react-router-dom';
 import Input from '../../../components/UI/Input/Input';
-import { inputStateChange, checkValidity } from '../../../shared/utility';
+import { inputStateChange } from '../../../shared/utility';
 import * as actions from '../../../store/actions/index';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 const STATES = [
