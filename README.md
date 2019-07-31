@@ -1,6 +1,16 @@
+## Introduction
 
+- This project is a react application bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- React concepts like Higher Order components, react-redux, react-routers are used to achieve different functionality within the application.
+
+- Various libraries like react-bootstrap, Formik, styled inputs have been used to enhance the UI.
+
+- There are 2 main branches: `master` and `use-spring-backend`
+
+- `master` branch uses a firebase database without really having an actual backend implementation
+
+- `use-spring-backend` branch acts as a front-end implementation for <provide repo url> (back-end developed using Spring Boot/Java8).
 
 ## Available Scripts
 
